@@ -1,17 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="aurora">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sum Calculator | A + B Addition</title>
-    <meta name="description" content="Modern, interactive calculator to add two numbers A and B with real-time feedback, history log, and responsive design.">
+    <meta name="description" content="Animated interactive calculator to add two numbers A and B with dynamic themes, real-time feedback, and particle effects.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Interactive Background Particle Canvas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Animated Ambient Lighting Orbs -->
     <div class="background-glow">
         <div class="glow-orb orb-1"></div>
         <div class="glow-orb orb-2"></div>
@@ -19,145 +23,164 @@
     </div>
 
     <main class="calculator-container">
+        <!-- Interactive Theme Selector -->
+        <nav class="theme-selector-bar" aria-label="Color Theme Selection">
+            <button type="button" class="theme-btn active" data-set-theme="aurora">
+                <span class="theme-color-dot dot-aurora"></span> Aurora
+            </button>
+            <button type="button" class="theme-btn" data-set-theme="sunset">
+                <span class="theme-color-dot dot-sunset"></span> Sunset
+            </button>
+            <button type="button" class="theme-btn" data-set-theme="emerald">
+                <span class="theme-color-dot dot-emerald"></span> Emerald
+            </button>
+            <button type="button" class="theme-btn" data-set-theme="ocean">
+                <span class="theme-color-dot dot-ocean"></span> Ocean
+            </button>
+        </nav>
+
         <header class="calculator-header">
-            <div class="badge">Mathematical Operations</div>
+            <div class="badge">✨ Dynamic Arithmetic Engine</div>
             <h1 class="title">Addition of Two Numbers</h1>
-            <p class="subtitle">Enter values for <span class="highlight">a</span> and <span class="highlight">b</span> to compute their sum <span class="formula">(a + b)</span></p>
+            <p class="subtitle">Compute sum of <span class="highlight">a</span> and <span class="highlight">b</span> &mdash; <span class="formula">a + b</span></p>
         </header>
 
-        <section class="card calculator-card">
-            <form id="additionForm" class="inputs-grid" onsubmit="event.preventDefault();">
-                <!-- Input A -->
-                <div class="input-group" id="groupA">
-                    <div class="input-label-row">
-                        <label for="numA" class="input-label">
-                            <span class="var-badge">a</span> First Number
-                        </label>
-                        <span class="quick-actions">
-                            <button type="button" class="btn-micro" onclick="adjustValue('numA', 1)" title="Add 1">+1</button>
-                            <button type="button" class="btn-micro" onclick="adjustValue('numA', -1)" title="Subtract 1">-1</button>
-                        </span>
+        <!-- Animated Rainbow/Gradient Border Container -->
+        <div class="card-wrapper-animated">
+            <section class="card calculator-card">
+                <form id="additionForm" class="inputs-grid" onsubmit="event.preventDefault();">
+                    <!-- Input A -->
+                    <div class="input-group" id="groupA">
+                        <div class="input-label-row">
+                            <label for="numA" class="input-label">
+                                <span class="var-badge">a</span> First Number
+                            </label>
+                            <span class="quick-actions">
+                                <button type="button" class="btn-micro" onclick="adjustValue('numA', 1)" title="Add 1">+1</button>
+                                <button type="button" class="btn-micro" onclick="adjustValue('numA', -1)" title="Subtract 1">-1</button>
+                            </span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input 
+                                type="number" 
+                                id="numA" 
+                                name="numA" 
+                                placeholder="Enter number a (e.g. 15)" 
+                                step="any"
+                                required
+                                autocomplete="off"
+                            >
+                            <button type="button" class="btn-clear-input" onclick="clearSingleInput('numA')" aria-label="Clear a">&times;</button>
+                        </div>
                     </div>
-                    <div class="input-wrapper">
-                        <input 
-                            type="number" 
-                            id="numA" 
-                            name="numA" 
-                            placeholder="Enter number a (e.g. 15)" 
-                            step="any"
-                            required
-                            autocomplete="off"
-                        >
-                        <button type="button" class="btn-clear-input" onclick="clearSingleInput('numA')" aria-label="Clear a">&times;</button>
-                    </div>
-                </div>
 
-                <!-- Operator Badge & Swap Button -->
-                <div class="operator-divider">
-                    <span class="operator-symbol" title="Addition">+</span>
-                    <button type="button" class="btn-swap" id="btnSwap" title="Swap A and B" aria-label="Swap A and B">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M7 16V4m0 0L3 8m4-4l4 4m6 4v12m0 0l4-4m-4 4l-4-4"/>
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Input B -->
-                <div class="input-group" id="groupB">
-                    <div class="input-label-row">
-                        <label for="numB" class="input-label">
-                            <span class="var-badge">b</span> Second Number
-                        </label>
-                        <span class="quick-actions">
-                            <button type="button" class="btn-micro" onclick="adjustValue('numB', 1)" title="Add 1">+1</button>
-                            <button type="button" class="btn-micro" onclick="adjustValue('numB', -1)" title="Subtract 1">-1</button>
-                        </span>
-                    </div>
-                    <div class="input-wrapper">
-                        <input 
-                            type="number" 
-                            id="numB" 
-                            name="numB" 
-                            placeholder="Enter number b (e.g. 25)" 
-                            step="any"
-                            required
-                            autocomplete="off"
-                        >
-                        <button type="button" class="btn-clear-input" onclick="clearSingleInput('numB')" aria-label="Clear b">&times;</button>
-                    </div>
-                </div>
-
-                <!-- Action Controls -->
-                <div class="controls-row">
-                    <button type="button" class="btn-primary" id="btnCalculate">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        <span>Calculate Sum (a + b)</span>
-                    </button>
-                    <button type="button" class="btn-secondary" id="btnRandom" title="Generate Random Numbers">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                            <circle cx="8" cy="8" r="1.5" fill="currentColor"></circle>
-                            <circle cx="16" cy="16" r="1.5" fill="currentColor"></circle>
-                            <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
-                        </svg>
-                        <span>Random</span>
-                    </button>
-                    <button type="button" class="btn-ghost" id="btnClear" title="Clear all inputs">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                        </svg>
-                        <span>Clear</span>
-                    </button>
-                </div>
-            </form>
-
-            <!-- Result Box -->
-            <div class="result-section" id="resultSection">
-                <div class="result-box" id="resultBox">
-                    <div class="result-header">
-                        <span class="result-label">Result: Sum (a + b)</span>
-                        <button type="button" class="btn-copy" id="btnCopy" title="Copy result to clipboard">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    <!-- Operator Badge & Swap Button -->
+                    <div class="operator-divider">
+                        <span class="operator-symbol" id="operatorBtn" title="Click to pulse addition">+</span >
+                        <button type="button" class="btn-swap" id="btnSwap" title="Swap values of A and B" aria-label="Swap A and B">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M7 16V4m0 0L3 8m4-4l4 4m6 4v12m0 0l4-4m-4 4l-4-4"/>
                             </svg>
-                            <span id="copyText">Copy</span>
                         </button>
                     </div>
-                    <div class="result-value-row">
-                        <span class="result-value" id="resultValue">--</span>
-                    </div>
-                    <div class="formula-breakdown" id="formulaBreakdown">
-                        <span id="formulaText">Enter values above and click Calculate</span>
-                    </div>
-                    
-                    <!-- Proportion Visualizer -->
-                    <div class="visualizer-container" id="visualizer" style="display: none;">
-                        <div class="visualizer-bar">
-                            <div class="bar-segment bar-a" id="barA" style="width: 50%;">
-                                <span class="bar-text" id="barAText">a</span>
-                            </div>
-                            <div class="bar-segment bar-b" id="barB" style="width: 50%;">
-                                <span class="bar-text" id="barBText">b</span>
-                            </div>
+
+                    <!-- Input B -->
+                    <div class="input-group" id="groupB">
+                        <div class="input-label-row">
+                            <label for="numB" class="input-label">
+                                <span class="var-badge var-badge-b">b</span> Second Number
+                            </label>
+                            <span class="quick-actions">
+                                <button type="button" class="btn-micro" onclick="adjustValue('numB', 1)" title="Add 1">+1</button>
+                                <button type="button" class="btn-micro" onclick="adjustValue('numB', -1)" title="Subtract 1">-1</button>
+                            </span>
                         </div>
-                        <div class="visualizer-legend">
-                            <span class="legend-item"><span class="legend-dot dot-a"></span> A Contribution</span>
-                            <span class="legend-item"><span class="legend-dot dot-b"></span> B Contribution</span>
+                        <div class="input-wrapper">
+                            <input 
+                                type="number" 
+                                id="numB" 
+                                name="numB" 
+                                placeholder="Enter number b (e.g. 25)" 
+                                step="any"
+                                required
+                                autocomplete="off"
+                            >
+                            <button type="button" class="btn-clear-input" onclick="clearSingleInput('numB')" aria-label="Clear b">&times;</button>
+                        </div>
+                    </div>
+
+                    <!-- Action Controls -->
+                    <div class="controls-row">
+                        <button type="button" class="btn-primary" id="btnCalculate">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <span>Calculate Sum (a + b)</span>
+                        </button>
+                        <button type="button" class="btn-secondary" id="btnRandom" title="Generate Random Numbers">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <circle cx="8" cy="8" r="1.5" fill="currentColor"></circle>
+                                <circle cx="16" cy="16" r="1.5" fill="currentColor"></circle>
+                                <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+                            </svg>
+                            <span>Random</span>
+                        </button>
+                        <button type="button" class="btn-ghost" id="btnClear" title="Clear all inputs">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                            </svg>
+                            <span>Clear</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Result Card -->
+                <div class="result-section" id="resultSection">
+                    <div class="result-box" id="resultBox">
+                        <div class="result-header">
+                            <span class="result-label">Result: Sum (a + b)</span>
+                            <button type="button" class="btn-copy" id="btnCopy" title="Copy result to clipboard">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span id="copyText">Copy</span>
+                            </button>
+                        </div>
+                        <div class="result-value-row">
+                            <span class="result-value" id="resultValue">--</span>
+                        </div>
+                        <div class="formula-breakdown" id="formulaBreakdown">
+                            <span id="formulaText">Enter values above and click Calculate</span>
+                        </div>
+                        
+                        <!-- Proportion Visualizer -->
+                        <div class="visualizer-container" id="visualizer" style="display: none;">
+                            <div class="visualizer-bar">
+                                <div class="bar-segment bar-a" id="barA" style="width: 50%;">
+                                    <span class="bar-text" id="barAText">a</span>
+                                </div>
+                                <div class="bar-segment bar-b" id="barB" style="width: 50%;">
+                                    <span class="bar-text" id="barBText">b</span>
+                                </div>
+                            </div>
+                            <div class="visualizer-legend">
+                                <span class="legend-item"><span class="legend-dot dot-a"></span> A Contribution</span>
+                                <span class="legend-item"><span class="legend-dot dot-b"></span> B Contribution</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Toast notification for copy -->
-            <div class="toast" id="toast">Copied to clipboard!</div>
-        </section>
+                <!-- Toast notification -->
+                <div class="toast" id="toast">Copied to clipboard!</div>
+            </section>
+        </div>
 
         <!-- Calculation History -->
-        <section class="card history-card" id="historyCard">
+        <section class="history-card" id="historyCard">
             <div class="history-header">
                 <h2>Calculation History</h2>
                 <button type="button" class="btn-micro" id="btnClearHistory">Clear All</button>
